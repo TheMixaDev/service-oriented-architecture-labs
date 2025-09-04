@@ -3,10 +3,13 @@ info:
   title: "СОА спецификация OpenAPI"
   description: Navigator сервис для поиска и создания оптимальных маршрутов (REST API)
     
+
     Беляев Михаил и Дениченко Александр
+
 
     Группа P3412
     
+
     Вариант 8801
   version: 1.0.0
 servers:
@@ -98,9 +101,9 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/InternalServerError'
         default:
-          description: "Default error response"
+          description: "Прочие сообщения об ошибках"
           content:
             application/xml:
               schema:
@@ -196,9 +199,9 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/InternalServerError'
         default:
-          description: "Default error response"
+          description: "Прочие сообщения об ошибках"
           content:
             application/xml:
               schema:
@@ -307,11 +310,19 @@ components:
           type: integer
           format: int64
           description: "Статус ошибки"
-          example: 400
         message:
           type: string
           description: "Сообщение об ошибке"
-          example: "Некорректные данные"
       required:
         - status
         - message
+    
+    InternalServerError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            status:
+              example: 500
+            message:
+              example: "Внутренняя ошибка сервера"
