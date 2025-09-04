@@ -6,7 +6,7 @@ info:
     Беляев Михаил и Дениченко Александр
 
     Группа P3412
-    
+
     Вариант 8801
   version: 1.0.0
 servers:
@@ -120,20 +120,12 @@ paths:
                 schema:
                   type: integer
                   example: 150
-              X-Page:
-                description: "Текущая страница"
-                schema:
-                  type: integer
-                  example: 1
-              X-Page-Size:
-                description: "Размер страницы"
-                schema:
-                  type: integer
-                  example: 10
             content:
               application/xml:
                 schema:
                   type: array
+                  xml:
+                    name: RouteList
                   items:
                     $ref: '#/components/schemas/Route'
           '400':
@@ -141,31 +133,15 @@ paths:
             content:
               application/xml:
                 schema:
-                  type: object
-                  properties:
-                    status:
-                      type: integer
-                      format: int64
-                      example: 400
-                    message:
-                      type: string
-                      example: "Некорректные данные"
+                  $ref: '#/components/schemas/BadRequestError'
           '500':
             description: "Внутренняя ошибка сервера"
             content:
               application/xml:
                 schema:
-                  type: object
-                  properties:
-                    status:
-                      type: integer
-                      format: int64
-                      example: 500
-                    message:
-                      type: string
-                      example: "Внутренняя ошибка сервера."
+                  $ref: '#/components/schemas/InternalServerError'
           default:
-            description: "Default error response"
+            description: "Прочие сообщения об ошибках"
             content:
               application/xml:
                 schema:
@@ -190,35 +166,19 @@ paths:
               schema:
                 $ref: '#/components/schemas/Route'
         '400':
-          description: "Некорректные данные."
+          description: "Некорректные данные"
           content:
             application/xml:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    format: int64
-                    example: 400
-                  message:
-                    type: string
-                    example: "Некорректные данные."
+                  $ref: '#/components/schemas/BadRequestError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
             application/xml:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    format: int64
-                    example: 500
-                  message:
-                    type: string
-                    example: "Внутренняя ошибка сервера."
+                  $ref: '#/components/schemas/InternalServerError'
         default:
-          description: "Default error response"
+          description: "Прочие сообщения об ошибках"
           content:
             application/xml:
               schema:
@@ -254,31 +214,15 @@ paths:
           content:
             application/xml:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    format: int64
-                    example: 404
-                  message:
-                    type: string
-                    example: "Маршрут с указанным ID не найден."
+                  $ref: '#/components/schemas/NotFoundError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
             application/xml:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    format: int64
-                    example: 500
-                  message:
-                    type: string
-                    example: "Внутренняя ошибка сервера."
+                $ref: '#/components/schemas/InternalServerError'
         default:
-          description: "Default error response"
+          description: "Прочие сообщения об ошибках"
           content:
             application/xml:
               schema:
@@ -320,45 +264,21 @@ paths:
           content:
             application/xml:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    format: int64
-                    example: 400
-                  message:
-                    type: string
-                    example: "Валидация не пройдена."
+                $ref: '#/components/schemas/BadRequestError'
         '404':
           description: "Маршрут с указанным ID не найден"
           content:
             application/xml:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    format: int64
-                    example: 404
-                  message:
-                    type: string
-                    example: "Маршрут с указанным ID не найден."
+                $ref: '#/components/schemas/NotFoundError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
             application/xml:
               schema:
-                type: object
-                properties:
-                  status:
-                    type: integer
-                    format: int64
-                    example: 500
-                  message:
-                    type: string
-                    example: "Внутренняя ошибка сервера."
+                $ref: '#/components/schemas/InternalServerError'
         default:
-          description: "Default error response"
+          description: "Прочие сообщения об ошибках"
           content:
             application/xml:
               schema:
@@ -388,7 +308,7 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/NotFoundError'
 
   /routes/max-by-from:
     get:
@@ -409,13 +329,13 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/NotFoundError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/InternalServerError'
   
   /routes/name-starts-with/{substring}:
     get:
@@ -439,6 +359,8 @@ paths:
             application/xml:
               schema:
                 type: array
+                xml:
+                  name: RouteList
                 items:
                   $ref: '#/components/schemas/Route'
         '400':
@@ -446,13 +368,13 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/BadRequestError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/InternalServerError'
 
   /routes/distances/unique:
     get:
@@ -467,6 +389,8 @@ paths:
             application/xml:
               schema:
                 type: array
+                xml:
+                  name: DistanceList
                 uniqueItems: true
                 items:
                   type: integer
@@ -478,7 +402,7 @@ paths:
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/InternalServerError'
 
  
 components:
@@ -598,3 +522,33 @@ components:
       required:
         - status
         - message
+    
+    InternalServerError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            status:
+              example: 500
+            message:
+              example: "Внутренняя ошибка сервера"
+
+    NotFoundError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            status:
+              example: 404
+            message:
+              example: "Маршрут с указанным ID не найден"
+    
+    BadRequestError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            status:
+              example: 400
+            message:
+              example: "Некорректные данные"
