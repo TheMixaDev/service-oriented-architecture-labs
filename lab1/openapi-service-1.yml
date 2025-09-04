@@ -88,6 +88,7 @@ paths:
                 type: string
                 format: date-time
                 description: "Фильтрация по дате создания"
+                example: "2024-01-01T00:00:00Z"
         - name: page
           in: query
           description: "Пагинация по номеру страницы (начиная с 1)"
@@ -110,6 +111,22 @@ paths:
       responses:
           '200':
             description: "Успешный ответ с массивом маршрутов"
+            headers:
+              X-Total-Count:
+                description: "Общее количество записей"
+                schema:
+                  type: integer
+                  example: 150
+              X-Page:
+                description: "Текущая страница"
+                schema:
+                  type: integer
+                  example: 1
+              X-Page-Size:
+                description: "Размер страницы"
+                schema:
+                  type: integer
+                  example: 10
             content:
               application/xml:
                 schema:
@@ -222,7 +239,6 @@ paths:
             minimum: 0
             exclusiveMinimum: true
             example: 1
-            nullable: false
       responses:
         '200':
           description: "Успешный ответ с объектом Route"
@@ -289,7 +305,6 @@ paths:
             minimum: 0
             exclusiveMinimum: true
             example: 1
-            nullable: false
       responses:
         '200':
           description: "Успешный ответ с объектом Route"
@@ -307,7 +322,7 @@ paths:
                   status:
                     type: integer
                     format: int64
-                    example: 405
+                    example: 400
                   message:
                     type: string
                     example: "Валидация не пройдена."
@@ -362,7 +377,6 @@ paths:
             minimum: 0
             exclusiveMinimum: true
             example: 1
-            nullable: false
       responses:
         '204':
           description: "Маршрут успешно удален"
@@ -379,6 +393,7 @@ paths:
         - "Routes"
       summary: "Получить один маршрут с максимальным значением поля 'from'"
       description: "Возвращает один (любой) объект, значение поля `from` которого является максимальным."
+      operationId: "getMaxByFrom"
       responses:
         '200':
           description: "Успешный ответ с объектом Route"
@@ -388,12 +403,23 @@ paths:
                 $ref: '#/components/schemas/Route'
         '404':
           description: "В коллекции нет ни одного маршрута"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: "Внутренняя ошибка сервера"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
   
   /routes/name-starts-with/{substring}:
     get:
       tags:
         - "Routes"
       summary: "Найти маршруты, имя которых начинается с подстроки"
+      operationId: "getRoutesByNamePrefix"
       parameters:
         - name: substring
           in: path
@@ -401,6 +427,8 @@ paths:
           required: true
           schema:
             type: string
+            minLength: 1
+            example: "Моск"
       responses:
         '200':
           description: "Массив найденных маршрутов"
@@ -416,12 +444,19 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Error'
+        '500':
+          description: "Внутренняя ошибка сервера"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /routes/distances/unique:
     get:
       tags:
         - "Routes"
       summary: "Получить массив уникальных значений поля distance"
+      operationId: "getUniqueDistances"
       responses:
         '200':
           description: "Массив уникальных дистанций"
@@ -429,10 +464,18 @@ paths:
             application/xml:
               schema:
                 type: array
+                uniqueItems: true
                 items:
                   type: integer
                   format: int64
                   description: "Уникальное значение дистанции"
+                example: [100, 250, 500, 1000]
+        '500':
+          description: "Внутренняя ошибка сервера"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
 
  
 components:
@@ -496,11 +539,6 @@ components:
           example: "Москва"
         coordinates:
           $ref: '#/components/schemas/Coordinates'
-        creationDate:
-          type: string
-          format: date-time
-          description: "Дата создания со временем (автоматически генерируется)."
-          example: "2025-01-01T00:00:00Z"
         from:
           $ref: '#/components/schemas/Location'
         to:
