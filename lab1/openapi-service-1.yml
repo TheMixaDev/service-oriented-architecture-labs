@@ -246,7 +246,7 @@ paths:
                   items:
                     $ref: '#/components/schemas/Route'
           '400':
-            description: "Некорректные данные в URL запроса"
+            description: "Некорректные данные в URL запросе"
             content:
               application/xml:
                 schema:
@@ -333,12 +333,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Route'
         '400':
-          description: "Некорректные данные в URL запроса"
+          description: "Некорректные данные в URL запросе"
           content:
             application/xml:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/Error'
+                  - $ref: '#/components/schemas/BadRequestError'
                   - type: object
                     properties:
                       message:
@@ -394,12 +394,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Route'
         '400':
-          description: "Некорректные данные в URL запроса"
+          description: "Некорректные данные в URL запросе"
           content:
             application/xml:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/Error'
+                  - $ref: '#/components/schemas/BadRequestError'
                   - type: object
                     properties:
                       message:
@@ -449,12 +449,12 @@ paths:
         '204':
           description: "Маршрут успешно удален"
         '400':
-          description: "Некорректные данные в URL запроса"
+          description: "Некорректные данные в URL запросе"
           content:
             application/xml:
               schema:
                 allOf:
-                  - $ref: '#/components/schemas/Error'
+                  - $ref: '#/components/schemas/BadRequestError'
                   - type: object
                     properties:
                       message:
@@ -720,7 +720,7 @@ components:
             status:
               example: 400
             message:
-              example: "Некорректные данные в URL запросе. Тип поля distance должен быть integerю"
+              example: "Некорректные данные в URL запросе. Тип поля distance должен быть integer."
     
     UnprocessableEntityError:
       allOf:

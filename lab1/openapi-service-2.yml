@@ -266,6 +266,17 @@ components:
       required:
         - x
         - name
+    
+    Priority:
+      type: string
+      description: "Важность маршрута"
+      enum:
+        - "LOW"
+        - "MEDIUM"
+        - "HIGH"
+      example: "HIGH"
+      xml:
+        name: "priority"
 
     Route:
       type: object
@@ -286,8 +297,6 @@ components:
           description: "Название маршрута"
           minLength: 1
           example: "Маршрут Москва-СПб"
-        coordinates:
-          $ref: '#/components/schemas/Coordinates'
         creationDate:
           type: string
           format: date-time
@@ -295,9 +304,25 @@ components:
           readOnly: true
           example: "2025-01-01T00:00:00Z"
         from:
-          $ref: '#/components/schemas/Location'
+          allOf:
+            - $ref: '#/components/schemas/Location'
+            - type: object
+              xml:
+                name: from
         to:
-          $ref: '#/components/schemas/Location'
+          allOf:
+            - $ref: '#/components/schemas/Location'
+            - type: object
+              xml:
+                name: to
+        coordinates:
+          allOf:
+            - $ref: '#/components/schemas/Coordinates'
+            - type: object
+              xml:
+                name: coordinates
+        priority:
+          $ref: '#/components/schemas/Priority'
         distance:
           type: integer
           format: int64
