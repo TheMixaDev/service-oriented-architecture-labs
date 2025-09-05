@@ -73,7 +73,7 @@ paths:
                   summary: "Неверный формат boolean"
                   value:
                     status: 400
-                    message: "Параметр 'shortest' должен быть 'true' или 'false'"
+                    message: "Параметр shortest должен быть true или false"
                 invalid_id:
                   summary: "Неверный ID"
                   value:
@@ -102,6 +102,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+        '503':
+          description: "Внешний сервис недоступен"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UnavailableError'
         default:
           description: "Прочие сообщения об ошибках"
           content:
@@ -200,6 +206,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+        '503':
+          description: "Внешний сервис недоступен"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UnavailableError'
         default:
           description: "Прочие сообщения об ошибках"
           content:
@@ -326,3 +338,13 @@ components:
               example: 500
             message:
               example: "Внутренняя ошибка сервера"
+    
+    UnavailableError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            status:
+              example: 503
+            message:
+              example: "Внешний сервис недоступен"
