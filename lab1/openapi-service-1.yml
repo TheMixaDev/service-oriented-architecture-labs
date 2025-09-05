@@ -95,6 +95,11 @@ paths:
                 format: date-time
                 description: "Фильтрация по дате создания"
                 example: "2024-01-01T00:00:00Z"
+              priority:
+                type: string
+                description: "Фильтрация по важности маршрута"
+                enum: ["LOW", "MEDIUM", "HIGH"]
+                example: "HIGH"
         - name: name_op
           in: query
           description: "Оператор сравнения для поля name"
@@ -188,6 +193,15 @@ paths:
         - name: creationDate_op
           in: query
           description: "Оператор сравнения для поля creationDate"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: priority_op
+          in: query
+          description: "Оператор сравнения для поля priority"
           required: false
           schema:
             type: string
