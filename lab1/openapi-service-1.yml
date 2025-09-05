@@ -129,6 +129,7 @@ paths:
                   type: array
                   xml:
                     name: RouteList
+                    wrapped: true
                   items:
                     $ref: '#/components/schemas/Route'
           '400':
@@ -339,45 +340,6 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
-  
-  /routes/name/starts-with/{substring}:
-    get:
-      tags:
-        - "Routes"
-      summary: "Найти маршруты, имя которых начинается с подстроки"
-      operationId: "getRoutesByNamePrefix"
-      parameters:
-        - name: substring
-          in: path
-          description: "Подстрока для поиска в начале поля `name`"
-          required: true
-          schema:
-            type: string
-            minLength: 1
-            example: "Моск"
-      responses:
-        '200':
-          description: "Массив найденных маршрутов"
-          content:
-            application/xml:
-              schema:
-                type: array
-                xml:
-                  name: RouteList
-                items:
-                  $ref: '#/components/schemas/Route'
-        '400':
-          description: "Некорректные данные"
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/BadRequestError'
-        '500':
-          description: "Внутренняя ошибка сервера"
-          content:
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/InternalServerError'
 
   /routes/distances/unique:
     get:
@@ -455,6 +417,17 @@ components:
       required:
         - x
         - name
+    
+    Priority:
+      type: string
+      description: "Важность маршрута"
+      enum:
+        - "LOW"
+        - "MEDIUM"
+        - "HIGH"
+      example: "HIGH"
+      xml:
+        name: "Priority"
 
     RouteInput:
       type: object
@@ -467,12 +440,12 @@ components:
           description: "Название маршрута"
           minLength: 1
           example: "Москва"
-        coordinates:
-          $ref: '#/components/schemas/Coordinates'
         from:
           $ref: '#/components/schemas/Location'
-        to:
-          $ref: '#/components/schemas/Location'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        priority:
+          $ref: '#/components/schemas/Priority'
         distance:
           type: integer
           format: int64
