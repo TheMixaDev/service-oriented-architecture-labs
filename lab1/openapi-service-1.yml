@@ -101,7 +101,7 @@ paths:
           required: false
           schema:
             type: string
-            enum: ["==", "!="]
+            enum: ["==", "!=", "~"]
             default: "=="
             example: "=="
         - name: distance_op
@@ -553,7 +553,7 @@ components:
         - "HIGH"
       example: "HIGH"
       xml:
-        name: "Priority"
+        name: "priority"
 
     RouteInput:
       type: object
@@ -567,9 +567,23 @@ components:
           minLength: 1
           example: "Москва"
         from:
-          $ref: '#/components/schemas/Location'
+          allOf:
+            - $ref: '#/components/schemas/Location'
+            - type: object
+              xml:
+                name: from
+        to:
+          allOf:
+            - $ref: '#/components/schemas/Location'
+            - type: object
+              xml:
+                name: to
         coordinates:
-          $ref: '#/components/schemas/Coordinates'
+          allOf:
+            - $ref: '#/components/schemas/Coordinates'
+            - type: object
+              xml:
+                name: coordinates
         priority:
           $ref: '#/components/schemas/Priority'
         distance:
