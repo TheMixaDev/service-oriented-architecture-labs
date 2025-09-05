@@ -313,7 +313,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/NotFoundError'
 
-  /routes/max-by-from:
+  /routes/max/from:
     get:
       tags:
         - "Routes"
@@ -340,7 +340,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
   
-  /routes/name-starts-with/{substring}:
+  /routes/name/starts-with/{substring}:
     get:
       tags:
         - "Routes"
