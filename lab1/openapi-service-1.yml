@@ -313,13 +313,25 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/NotFoundError'
+        '500':
+          description: "Внутренняя ошибка сервера"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+        default:
+          description: "Прочие сообщения об ошибках"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /routes/max/from:
     get:
       tags:
         - "Routes"
       summary: "Получить один маршрут с максимальным значением поля 'from'"
-      description: "Возвращает один (любой) объект, значение поля `from` которого является максимальным."
+      description: "Возвращает один (любой) объект, значение поля `from` которого является максимальным. Маршрут считается максимальным, если его значение `max(x, y)` больше, чем у остальных маршрутов. Если таких маршрутов несколько, возвращается первый найденный (с наименьшим `ID`)."
       operationId: "getMaxByFrom"
       responses:
         '200':
@@ -340,6 +352,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+        default:
+          description: "Прочие сообщения об ошибках"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /routes/distances/unique:
     get:
@@ -356,11 +374,14 @@ paths:
                 type: array
                 xml:
                   name: DistanceList
+                  wrapped: true
                 uniqueItems: true
                 items:
                   type: integer
                   format: int64
                   description: "Уникальное значение дистанции"
+                  xml:
+                    name: Distance
                 example: [100, 250, 500, 1000]
         '500':
           description: "Внутренняя ошибка сервера"
@@ -368,6 +389,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/InternalServerError'
+        default:
+          description: "Прочие сообщения об ошибках"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Error'
 
  
 components:
@@ -527,4 +554,4 @@ components:
             status:
               example: 400
             message:
-              example: "Некорректные данные"
+              example: "Некорректные данные в поле distance, его тип должен быть integer"
