@@ -246,11 +246,17 @@ paths:
                   items:
                     $ref: '#/components/schemas/Route'
           '400':
-            description: "Некорректные данные"
+            description: "Некорректные данные в URL запроса"
             content:
               application/xml:
                 schema:
                   $ref: '#/components/schemas/BadRequestError'
+          '422':
+            description: "Некорректные данные в теле запроса"
+            content:
+              application/xml:
+                schema:
+                  $ref: '#/components/schemas/UnprocessableEntityError'
           '500':
             description: "Внутренняя ошибка сервера"
             content:
@@ -282,12 +288,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Route'
-        '400':
-          description: "Некорректные данные"
+        '422':
+          description: "Некорректные данные в теле запроса"
           content:
             application/xml:
               schema:
-                  $ref: '#/components/schemas/BadRequestError'
+                  $ref: '#/components/schemas/UnprocessableEntityError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
@@ -326,6 +332,17 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Route'
+        '400':
+          description: "Некорректные данные в URL запроса"
+          content:
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                  - type: object
+                    properties:
+                      message:
+                        example: "Некорректные данные в URL запросе. Тип поля id должен быть integer."
         '404':
           description: "Маршрут с указанным ID не найден"
           content:
@@ -377,17 +394,28 @@ paths:
               schema:
                 $ref: '#/components/schemas/Route'
         '400':
-          description: "Валидация не пройдена"
+          description: "Некорректные данные в URL запроса"
           content:
             application/xml:
               schema:
-                $ref: '#/components/schemas/BadRequestError'
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                  - type: object
+                    properties:
+                      message:
+                        example: "Некорректные данные в URL запросе. Тип поля id должен быть integer."
         '404':
           description: "Маршрут с указанным ID не найден"
           content:
             application/xml:
               schema:
                 $ref: '#/components/schemas/NotFoundError'
+        '422':
+          description: "Некорректные данные в теле запроса"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/UnprocessableEntityError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
@@ -420,6 +448,17 @@ paths:
       responses:
         '204':
           description: "Маршрут успешно удален"
+        '400':
+          description: "Некорректные данные в URL запроса"
+          content:
+            application/xml:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Error'
+                  - type: object
+                    properties:
+                      message:
+                        example: "Некорректные данные в URL запросе. Тип поля id должен быть integer."
         '404':
           description: "Маршрут не найден"
           content:
@@ -681,4 +720,14 @@ components:
             status:
               example: 400
             message:
-              example: "Некорректные данные в поле distance, его тип должен быть integer"
+              example: "Некорректные данные в URL запросе. Тип поля distance должен быть integerю"
+    
+    UnprocessableEntityError:
+      allOf:
+        - $ref: '#/components/schemas/Error'
+        - type: object
+          properties:
+            status:
+              example: 422
+            message:
+              example: "Некорректные данные в теле запроса. Тип поля distance должен быть integer."
