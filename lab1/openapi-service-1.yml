@@ -95,6 +95,105 @@ paths:
                 format: date-time
                 description: "Фильтрация по дате создания"
                 example: "2024-01-01T00:00:00Z"
+        - name: name_op
+          in: query
+          description: "Оператор сравнения для поля name"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!="]
+            default: "=="
+            example: "=="
+        - name: distance_op
+          in: query
+          description: "Оператор сравнения для поля distance"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: coordinates_x_op
+          in: query
+          description: "Оператор сравнения для поля coordinates.x"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: coordinates_y_op
+          in: query
+          description: "Оператор сравнения для поля coordinates.y"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: from_x_op
+          in: query
+          description: "Оператор сравнения для поля from.x"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: from_y_op
+          in: query
+          description: "Оператор сравнения для поля from.y"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: from_name_op
+          in: query
+          description: "Оператор сравнения для поля from.name"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", "~"]
+            default: "=="
+            example: "=="
+        - name: to_x_op
+          in: query
+          description: "Оператор сравнения для поля to.x"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: to_y_op
+          in: query
+          description: "Оператор сравнения для поля to.y"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
+        - name: to_name_op
+          in: query
+          description: "Оператор сравнения для поля to.name"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", "~"]
+            default: "=="
+            example: "=="
+        - name: creationDate_op
+          in: query
+          description: "Оператор сравнения для поля creationDate"
+          required: false
+          schema:
+            type: string
+            enum: ["==", "!=", ">", ">=", "<", "<="]
+            default: "=="
+            example: "=="
         - name: page
           in: query
           description: "Пагинация по номеру страницы (начиная с 1)"
