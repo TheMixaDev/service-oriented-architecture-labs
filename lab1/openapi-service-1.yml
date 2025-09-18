@@ -251,12 +251,6 @@ paths:
               application/xml:
                 schema:
                   $ref: '#/components/schemas/BadRequestError'
-          '422':
-            description: "Некорректные данные в теле запроса"
-            content:
-              application/xml:
-                schema:
-                  $ref: '#/components/schemas/UnprocessableEntityError'
           '500':
             description: "Внутренняя ошибка сервера"
             content:
@@ -288,6 +282,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Route'
+        '400':
+          description: "Некорректные данные в URL запросе"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
         '422':
           description: "Некорректные данные в теле запроса"
           content:
@@ -492,6 +492,12 @@ paths:
             application/xml:
               schema:
                 $ref: '#/components/schemas/Route'
+        '400':
+          description: "Некорректные данные в URL запросе"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
         '404':
           description: "В коллекции нет ни одного маршрута"
           content:
@@ -535,6 +541,12 @@ paths:
                   xml:
                     name: Distance
                 example: [100, 250, 500, 1000]
+        '400':
+          description: "Некорректные данные в URL запросе"
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/BadRequestError'
         '500':
           description: "Внутренняя ошибка сервера"
           content:
