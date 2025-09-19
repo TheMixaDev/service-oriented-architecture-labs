@@ -100,114 +100,87 @@ paths:
                 description: "Фильтрация по важности маршрута"
                 enum: ["LOW", "MEDIUM", "HIGH"]
                 example: "HIGH"
-        - name: name_op
+        - name: operation
           in: query
-          description: "Оператор сравнения для поля name"
+          description: "Операторы сравнения для полей фильтрации."
           required: false
+          style: form
+          explode: true
           schema:
-            type: string
-            enum: ["==", "!=", "~"]
-            default: "=="
-            example: "=="
-        - name: distance_op
-          in: query
-          description: "Оператор сравнения для поля distance"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: coordinates_x_op
-          in: query
-          description: "Оператор сравнения для поля coordinates.x"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: coordinates_y_op
-          in: query
-          description: "Оператор сравнения для поля coordinates.y"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: from_x_op
-          in: query
-          description: "Оператор сравнения для поля from.x"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: from_y_op
-          in: query
-          description: "Оператор сравнения для поля from.y"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: from_name_op
-          in: query
-          description: "Оператор сравнения для поля from.name"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", "~"]
-            default: "=="
-            example: "=="
-        - name: to_x_op
-          in: query
-          description: "Оператор сравнения для поля to.x"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: to_y_op
-          in: query
-          description: "Оператор сравнения для поля to.y"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: to_name_op
-          in: query
-          description: "Оператор сравнения для поля to.name"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", "~"]
-            default: "=="
-            example: "=="
-        - name: creationDate_op
-          in: query
-          description: "Оператор сравнения для поля creationDate"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
-        - name: priority_op
-          in: query
-          description: "Оператор сравнения для поля priority"
-          required: false
-          schema:
-            type: string
-            enum: ["==", "!=", ">", ">=", "<", "<="]
-            default: "=="
-            example: "=="
+            type: object
+            properties:
+              name_op: 
+                type: string
+                description: "Оператор для поля 'name'"
+                enum: ["==", "!=", "~"]
+                default: "=="
+                example: "=="
+              distance_op:
+                type: string
+                description: "Оператор для поля 'distance'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              "coordinates.x_op":
+                type: string
+                description: "Оператор для поля 'coordinates.x'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              "coordinates.y_op":
+                type: string
+                description: "Оператор для поля 'coordinates.y'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              "from.x_op":
+                type: string
+                description: "Оператор для поля 'from.x'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              "from.y_op":
+                type: string
+                description: "Оператор для поля 'from.y'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              "from.name_op":
+                type: string
+                description: "Оператор для поля 'from.name'"
+                enum: ["==", "!=", "~"]
+                default: "=="
+                example: "=="
+              "to.x_op":
+                type: string
+                description: "Оператор для поля 'to.x'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              "to.y_op":
+                type: string
+                description: "Оператор для поля 'to.y'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              "to.name_op":
+                type: string
+                description: "Оператор для поля 'to.name'"
+                enum: ["==", "!=", "~"]
+                default: "=="
+                example: "=="
+              creationDate_op:
+                type: string
+                description: "Оператор для поля 'creationDate'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
+              priority_op:
+                type: string
+                description: "Оператор для поля 'priority'"
+                enum: ["==", "!=", ">", ">=", "<", "<="]
+                default: "=="
+                example: "=="
         - name: page
           in: query
           description: "Пагинация по номеру страницы (начиная с 1)"
