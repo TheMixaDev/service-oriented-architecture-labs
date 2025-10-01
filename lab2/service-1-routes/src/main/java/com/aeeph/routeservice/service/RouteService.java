@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface RouteService {
-    Page<Route> getAllRoutes(Map<String, String> filters, Pageable pageable);
+    Page<Route> getAllRoutes(Map<String, String> filters, Map<String, String> operations, Pageable pageable);
     Route createRoute(Route route);
     Optional<Route> getRouteById(Long id);
     Route updateRoute(Long id, Route routeDetails);
