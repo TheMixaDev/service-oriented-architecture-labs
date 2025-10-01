@@ -5,7 +5,6 @@ import com.aeeph.routeservice.model.Route;
 import com.aeeph.routeservice.model.RouteList;
 import com.aeeph.routeservice.service.RouteService;
 import com.aeeph.routeservice.model.DistanceList;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,28 +24,36 @@ public class RouteController {
 
     private final RouteService routeService;
 
-    @Autowired
     public RouteController(RouteService routeService) {
         this.routeService = routeService;
     }
 
     @GetMapping
     public ResponseEntity<RouteList> getRoutes(
-            @RequestParam(required = false) String[] sort,
+            @RequestParam(required = false) String sort,
             @RequestParam(required = false) Map<String, String> filter,
+            @RequestParam(required = false) Map<String, String> operation,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int pageSize) {
         
         List<Sort.Order> orders = new ArrayList<>();
-        if (sort != null) {
-            for (String sortOrder : sort) {
-                String[] _sort = sortOrder.split("_");
-                orders.add(new Sort.Order(_sort.length > 1 && _sort[1].equalsIgnoreCase("desc") ? Sort.Direction.DESC : Sort.Direction.ASC, _sort[0]));
+        if (sort != null && !sort.isEmpty()) {
+            String[] sortFields = sort.split(",");
+            for (String sortOrder : sortFields) {
+                String[] _sort = sortOrder.trim().split("_");
+                if (_sort.length > 0) {
+                    String fieldName = _sort[0];
+                    Sort.Direction direction = Sort.Direction.ASC;
+                    if (_sort.length > 1 && _sort[1].equalsIgnoreCase("desc")) {
+                        direction = Sort.Direction.DESC;
+                    }
+                    orders.add(new Sort.Order(direction, fieldName));
+                }
             }
         }
 
         Pageable pageable = PageRequest.of(page - 1, pageSize, Sort.by(orders));
-        Page<Route> routePage = routeService.getAllRoutes(filter, pageable);
+        Page<Route> routePage = routeService.getAllRoutes(filter, operation, pageable);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(routePage.getTotalElements()));
