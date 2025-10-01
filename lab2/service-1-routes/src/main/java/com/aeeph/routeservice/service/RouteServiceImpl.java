@@ -47,25 +47,30 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public Route updateRoute(Long id, Route routeDetails) {
         Route route = routeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Маршрут с указанным ID не найден"));
 
         route.setName(routeDetails.getName());
         route.setCoordinates(routeDetails.getCoordinates());
-        route.setFrom(routeDetails.getFrom());
-        route.setTo(routeDetails.getTo());
+        route.setFromLocation(routeDetails.getFromLocation());
+        route.setToLocation(routeDetails.getToLocation());
         route.setDistance(routeDetails.getDistance());
+        route.setPriority(routeDetails.getPriority());
 
         return routeRepository.save(route);
     }
 
     @Override
     public void deleteRoute(Long id) {
+        if (!routeRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Маршрут с указанным ID не найден");
+        }
         routeRepository.deleteById(id);
     }
 
     @Override
     public Optional<Route> getMaxByFrom() {
-        return routeRepository.findTopByOrderByFromLocationDesc().stream().findFirst();
+        List<Route> list = routeRepository.findTopByFromMax();
+        return list.isEmpty() ? Optional.empty() : Optional.of(list.get(0));
     }
 
     @Override

@@ -2,7 +2,9 @@ package com.aeeph.routeservice.controller;
 
 import com.aeeph.routeservice.exception.ResourceNotFoundException;
 import com.aeeph.routeservice.model.Route;
+import com.aeeph.routeservice.model.RouteList;
 import com.aeeph.routeservice.service.RouteService;
+import com.aeeph.routeservice.model.DistanceList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +31,7 @@ public class RouteController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Route>> getRoutes(
+    public ResponseEntity<RouteList> getRoutes(
             @RequestParam(required = false) String[] sort,
             @RequestParam(required = false) Map<String, String> filter,
             @RequestParam(defaultValue = "1") int page,
@@ -48,11 +51,11 @@ public class RouteController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Total-Count", String.valueOf(routePage.getTotalElements()));
 
-        return ResponseEntity.ok().headers(headers).body(routePage.getContent());
+        return ResponseEntity.ok().headers(headers).body(new RouteList(routePage.getContent()));
     }
 
     @PostMapping(consumes = "application/xml")
-    public ResponseEntity<Route> createRoute(@RequestBody Route route) {
+    public ResponseEntity<Route> createRoute(@Valid @RequestBody Route route) {
         Route createdRoute = routeService.createRoute(route);
         return ResponseEntity.status(201).body(createdRoute);
     }
@@ -60,12 +63,12 @@ public class RouteController {
     @GetMapping("/{id}")
     public ResponseEntity<Route> getRouteById(@PathVariable Long id) {
         Route route = routeService.getRouteById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Route not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Маршрут с указанным ID не найден"));
         return ResponseEntity.ok(route);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/xml")
-    public ResponseEntity<Route> updateRoute(@PathVariable Long id, @RequestBody Route routeDetails) {
+    public ResponseEntity<Route> updateRoute(@PathVariable Long id, @Valid @RequestBody Route routeDetails) {
         Route updatedRoute = routeService.updateRoute(id, routeDetails);
         return ResponseEntity.ok(updatedRoute);
     }
@@ -76,22 +79,22 @@ public class RouteController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/max-by-from")
+    @GetMapping("/max/from")
     public ResponseEntity<Route> getMaxByFrom() {
         Route route = routeService.getMaxByFrom()
-                .orElseThrow(() -> new ResourceNotFoundException("No routes found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Маршрут с указанным ID не найден"));
         return ResponseEntity.ok(route);
     }
 
     @GetMapping("/name-starts-with/{substring}")
-    public ResponseEntity<List<Route>> getRoutesByNamePrefix(@PathVariable String substring) {
+    public ResponseEntity<RouteList> getRoutesByNamePrefix(@PathVariable String substring) {
         List<Route> routes = routeService.findRoutesByNameStartingWith(substring);
-        return ResponseEntity.ok(routes);
+        return ResponseEntity.ok(new RouteList(routes));
     }
 
     @GetMapping("/distances/unique")
-    public ResponseEntity<List<Integer>> getUniqueDistances() {
+    public ResponseEntity<DistanceList> getUniqueDistances() {
         List<Integer> distances = routeService.getUniqueDistances();
-        return ResponseEntity.ok(distances);
+        return ResponseEntity.ok(new DistanceList(distances));
     }
 }

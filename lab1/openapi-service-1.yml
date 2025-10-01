@@ -13,7 +13,7 @@ info:
     Вариант 8801
   version: 1.0.0
 servers:
-  - url: http://localhost:8888/api/v1
+  - url: http://localhost:27275/api/v1
 
 
 tags:

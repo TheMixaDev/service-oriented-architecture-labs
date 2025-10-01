@@ -1,54 +1,66 @@
 package com.aeeph.routeservice.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+//import javax.xml.bind.annotation.XmlAccessType;
+//import javax.xml.bind.annotation.XmlAccessorType;
+//import javax.xml.bind.annotation.XmlElement;
+//import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Entity
-@XmlRootElement(name = "Route")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JacksonXmlRootElement(localName = "Route")
+//@XmlAccessorType(XmlAccessType.FIELD)
 public class Route {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id; //Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
 
-    @NotNull
-    @Size(min = 1)
+    @NotNull(message = "Не заполнено поле name")
+    @Size(min = 1, message = "Поле name не может быть пустым")
     private String name; //Поле не может быть null, Строка не может быть пустой
 
-    @NotNull
+    @NotNull(message = "Не заполнено поле coordinates")
+    @Valid
     @Embedded
     private Coordinates coordinates; //Поле не может быть null
 
-    @NotNull
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
 
-    @NotNull
+    @NotNull(message = "Не заполнено поле from")
+    @Valid
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name="x", column=@Column(name="from_x")),
             @AttributeOverride(name="y", column=@Column(name="from_y")),
             @AttributeOverride(name="name", column=@Column(name="from_name"))
     })
+    @JacksonXmlProperty(localName = "from")
     private Location fromLocation; //Поле не может быть null
 
-    @NotNull
+    @NotNull(message = "Не заполнено поле to")
+    @Valid
     @Embedded
     @AttributeOverrides({
             @AttributeOverride(name="x", column=@Column(name="to_x")),
             @AttributeOverride(name="y", column=@Column(name="to_y")),
             @AttributeOverride(name="name", column=@Column(name="to_name"))
     })
+    @JacksonXmlProperty(localName = "to")
     private Location toLocation; //Поле не может быть null
 
-    @Min(2)
+    @Min(value = 2, message = "Значение поля distance должно быть больше 1")
     private Integer distance; //Поле может быть null, Значение поля должно быть больше 1
+
+    @Enumerated(EnumType.STRING)
+    @JacksonXmlProperty(localName = "priority")
+    private Priority priority;
 
     @PrePersist
     protected void onCreate() {
@@ -87,21 +99,19 @@ public class Route {
         this.creationDate = creationDate;
     }
 
-    @XmlElement(name = "from")
-    public Location getFrom() {
+    public Location getFromLocation() {
         return fromLocation;
     }
 
-    public void setFrom(Location from) {
+    public void setFromLocation(Location from) {
         this.fromLocation = from;
     }
 
-    @XmlElement(name = "to")
-    public Location getTo() {
+    public Location getToLocation() {
         return toLocation;
     }
 
-    public void setTo(Location to) {
+    public void setToLocation(Location to) {
         this.toLocation = to;
     }
 
@@ -111,5 +121,13 @@ public class Route {
 
     public void setDistance(Integer distance) {
         this.distance = distance;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 }

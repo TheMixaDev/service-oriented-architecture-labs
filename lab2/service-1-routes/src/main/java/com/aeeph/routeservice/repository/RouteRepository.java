@@ -15,5 +15,6 @@ public interface RouteRepository extends JpaRepository<Route, Long>, JpaSpecific
     @Query("SELECT DISTINCT r.distance FROM Route r ORDER BY r.distance ASC")
     List<Integer> findUniqueDistances();
 
-    List<Route> findTopByOrderByFromLocationDesc();
+    @Query("SELECT r FROM Route r ORDER BY GREATEST(COALESCE(r.fromLocation.x,0), COALESCE(r.fromLocation.y,0)) DESC, r.id ASC")
+    List<Route> findTopByFromMax();
 }

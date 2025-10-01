@@ -6,9 +6,13 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class RouteSpecification {
 
@@ -19,13 +23,27 @@ public class RouteSpecification {
             filters.forEach((key, value) -> {
                 if (value != null && !value.isEmpty()) {
                     try {
-                        String[] keys = key.split("\\.");
-                        if (keys.length == 2) {
-                            // аля "coordinates.x"
-                            predicates.add(criteriaBuilder.equal(root.get(keys[0]).get(keys[1]), value));
+                        if ("creationDate".equals(key)) {
+                            try {
+                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+                                format.setTimeZone(TimeZone.getTimeZone("UTC"));
+                                predicates.add(criteriaBuilder.equal(root.get(key), format.parse(value)));
+                            } catch (ParseException e) {
+                            }
+                        } else if (key.contains(".")) {
+                            String[] keys = key.split("\\.", 2);
+                            String objectName = keys[0];
+                            String fieldName = keys[1];
+
+                            if ("from".equals(objectName)) {
+                                objectName = "fromLocation";
+                            } else if ("to".equals(objectName)) {
+                                objectName = "toLocation";
+                            }
+                            
+                            predicates.add(criteriaBuilder.equal(root.get(objectName).get(fieldName), value));
                         } else {
-                             // аля "name"
-                            predicates.add(criteriaBuilder.equal(root.get(key), value));
+                             predicates.add(criteriaBuilder.equal(root.get(key), value));
                         }
                     } catch (IllegalArgumentException e) {
                     }
