@@ -1,13 +1,10 @@
 package com.aeeph.navigatorservice.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 import java.util.Date;
 
-@XmlRootElement(name = "Route")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JacksonXmlRootElement(localName = "Route")
 public class Route {
 
     private long id;
@@ -15,13 +12,16 @@ public class Route {
     private Coordinates coordinates;
     private Date creationDate;
     
-    @XmlElement(name = "from")
+    @JacksonXmlProperty(localName = "from")
     private Location fromLocation;
     
-    @XmlElement(name = "to")
+    @JacksonXmlProperty(localName = "to")
     private Location toLocation;
     
     private Integer distance;
+
+    @JacksonXmlProperty(localName = "priority")
+    private Priority priority;
 
     public long getId() {
         return id;
@@ -77,5 +77,13 @@ public class Route {
 
     public void setDistance(Integer distance) {
         this.distance = distance;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 }

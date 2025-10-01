@@ -1,11 +1,22 @@
 package com.aeeph.navigatorservice.service;
 
 import com.aeeph.navigatorservice.model.Route;
+import com.aeeph.navigatorservice.model.Priority;
+import com.aeeph.navigatorservice.exception.ResourceNotFoundException;
+import com.aeeph.navigatorservice.exception.ServiceUnavailableException;
+import com.aeeph.navigatorservice.exception.ConflictException;
+import com.aeeph.navigatorservice.exception.BadRequestException;
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpClientErrorException;
 
-import java.util.*;
+import java.util.Optional;
 
 @Service
 public class NavigatorServiceImpl implements NavigatorService {
@@ -20,70 +31,37 @@ public class NavigatorServiceImpl implements NavigatorService {
 
     @Override
     public Optional<Route> findOptimalRoute(long fromId, long toId, boolean shortest) {
-        Route[] allRoutes = getAllRoutes();
-        if (allRoutes == null) return Optional.empty();
-
-        Route startNodeRoute = getRouteById(fromId);
-        Route endNodeRoute = getRouteById(toId);
-        if (startNodeRoute == null || endNodeRoute == null) return Optional.empty();
+        Route startNodeRoute = getRouteByIdWithErrorHandling(fromId);
+        Route endNodeRoute = getRouteByIdWithErrorHandling(toId);
         
-        String startLocationName = startNodeRoute.getFrom().getName();
-        String endLocationName = endNodeRoute.getTo().getName();
+        String startLocationName = startNodeRoute.getName();
+        String endLocationName = endNodeRoute.getName();
 
-        Map<String, List<Edge>> graph = new HashMap<>();
-        for (Route route : allRoutes) {
-            graph.putIfAbsent(route.getFrom().getName(), new ArrayList<>());
-            graph.get(route.getFrom().getName()).add(new Edge(route.getTo().getName(), route.getDistance()));
-        }
+        int distance = shortest ?
+                startNodeRoute.getCoordinates().distanceLinear(endNodeRoute.getCoordinates()) :
+                startNodeRoute.getCoordinates().distanceTo(endNodeRoute.getCoordinates());
 
-        Map<String, Integer> distances = new HashMap<>();
-        Map<String, String> previousNodes = new HashMap<>();
-        PriorityQueue<Node> pq = new PriorityQueue<>(Comparator.comparingInt(node -> node.distance));
+        Route syntheticRoute = new Route();
+        syntheticRoute.setFrom(startNodeRoute.getCoordinates().toLocation(startLocationName));
+        syntheticRoute.setTo(endNodeRoute.getCoordinates().toLocation(endLocationName));
+        syntheticRoute.setDistance(distance);
+        syntheticRoute.setName("Маршрут " + startLocationName + "-" + endLocationName);
+        syntheticRoute.setPriority(Priority.HIGH);
 
-        for (String location : graph.keySet()) {
-            distances.put(location, shortest ? Integer.MAX_VALUE : Integer.MIN_VALUE);
-        }
-        distances.put(startLocationName, 0);
-        pq.add(new Node(startLocationName, 0));
-
-        while (!pq.isEmpty()) {
-            Node currentNode = pq.poll();
-            if (currentNode.name.equals(endLocationName)) break;
-
-            List<Edge> neighbors = graph.getOrDefault(currentNode.name, Collections.emptyList());
-            for (Edge edge : neighbors) {
-                int newDist = distances.get(currentNode.name) + edge.weight;
-                if (shortest && newDist < distances.get(edge.target)) {
-                    distances.put(edge.target, newDist);
-                    previousNodes.put(edge.target, currentNode.name);
-                    pq.add(new Node(edge.target, newDist));
-                } else if (!shortest && newDist > distances.get(edge.target)) {
-                    distances.put(edge.target, newDist);
-                    previousNodes.put(edge.target, currentNode.name);
-                    pq.add(new Node(edge.target, newDist));
-                }
-            }
-        }
-        
-        if (distances.get(endLocationName) != (shortest ? Integer.MAX_VALUE : Integer.MIN_VALUE)) {
-            Route syntheticRoute = new Route();
-            syntheticRoute.setFrom(startNodeRoute.getFrom());
-            syntheticRoute.setTo(endNodeRoute.getTo());
-            syntheticRoute.setDistance(distances.get(endLocationName));
-            syntheticRoute.setName("Optimal path from " + startLocationName + " to " + endLocationName);
-            return Optional.of(syntheticRoute);
-        }
-
-        return Optional.empty();
+        return Optional.of(syntheticRoute);
     }
 
     @Override
-    public Route createRouteByIds(long fromId, long toId, int distance) {
-        Route fromRoute = getRouteById(fromId);
-        Route toRoute = getRouteById(toId);
+    public Route createRouteByIds(long fromId, long toId, int distance) {        
+        if (distance <= 1) {
+            throw new BadRequestException("Параметр distance должен быть больше 1");
+        }
+        
+        Route fromRoute = getRouteByIdWithErrorHandling(fromId);
+        Route toRoute = getRouteByIdWithErrorHandling(toId);
 
-        if (fromRoute == null || toRoute == null) {
-            return null;
+        if (fromId == toId) {
+            throw new ConflictException("Маршрут между этими точками уже существует");
         }
 
         Route newRoute = new Route();
@@ -92,27 +70,29 @@ public class NavigatorServiceImpl implements NavigatorService {
         newRoute.setTo(toRoute.getTo());
         newRoute.setCoordinates(fromRoute.getCoordinates());
         newRoute.setDistance(distance);
+        newRoute.setPriority(Priority.HIGH);
 
-        return restTemplate.postForObject(routesServiceUrl, newRoute, Route.class);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_XML);
+            HttpEntity<Route> request = new HttpEntity<>(newRoute, headers);
+            return restTemplate.postForObject(routesServiceUrl, request, Route.class);
+        } catch (RestClientException e) {
+            throw new ServiceUnavailableException("Внешний сервис недоступен");
+        }
     }
 
-    private Route getRouteById(long id) {
-        return restTemplate.getForObject(routesServiceUrl + "/" + id, Route.class);
-    }
-
-    private Route[] getAllRoutes() {
-        return restTemplate.getForObject(routesServiceUrl, Route[].class);
-    }
-
-    private static class Edge {
-        String target;
-        int weight;
-        Edge(String target, int weight) { this.target = target; this.weight = weight; }
-    }
-
-    private static class Node {
-        String name;
-        int distance;
-        Node(String name, int distance) { this.name = name; this.distance = distance; }
+    private Route getRouteByIdWithErrorHandling(long id) {
+        try {
+            Route route = restTemplate.getForObject(routesServiceUrl + "/" + id, Route.class);
+            if (route == null) {
+                throw new ResourceNotFoundException("Маршрут с ID " + id + " не найден");
+            }
+            return route;
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new ResourceNotFoundException("Маршрут с ID " + id + " не найден");
+        } catch (RestClientException e) {
+            throw new ServiceUnavailableException("Внешний сервис недоступен");
+        }
     }
 }
