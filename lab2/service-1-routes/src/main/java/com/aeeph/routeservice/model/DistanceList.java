@@ -1,16 +1,17 @@
 package com.aeeph.routeservice.model;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import java.util.List;
 
-@JacksonXmlRootElement(localName = "DistanceList")
+@XmlRootElement(name = "DistanceList")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class DistanceList {
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "Distance")
+    @XmlElement(name = "Distance")
     private List<Integer> distances;
 
     public DistanceList() {}

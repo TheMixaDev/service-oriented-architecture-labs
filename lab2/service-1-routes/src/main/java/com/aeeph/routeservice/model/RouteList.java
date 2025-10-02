@@ -1,15 +1,17 @@
 package com.aeeph.routeservice.model;
 
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
-import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
-@JacksonXmlRootElement(localName = "RouteList")
+@XmlRootElement(name = "RouteList")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class RouteList {
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "Route")
+    @XmlElement(name = "Route")
     private List<Route> routes;
 
     public RouteList() {
