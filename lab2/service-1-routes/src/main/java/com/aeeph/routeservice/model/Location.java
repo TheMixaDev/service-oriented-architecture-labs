@@ -1,15 +1,13 @@
 package com.aeeph.routeservice.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
 
 @Embeddable
-@XmlRootElement(name = "Location")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JacksonXmlRootElement(localName = "Location")
 public class Location {
 
     @NotNull(message = "Не заполнено поле x")

@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2">
+<jboss-deployment-structure>
     <deployment>
-        <exclusions>
-            <module name="com.fasterxml.jackson.core.jackson-core"/>
-            <module name="com.fasterxml.jackson.core.jackson-databind"/>
-            <module name="com.fasterxml.jackson.core.jackson-annotations"/>
-            <module name="com.fasterxml.jackson.dataformat.jackson-dataformat-xml"/>
-        </exclusions>
+        <exclude-subsystems>
+            <subsystem name="jaxrs"/>
+        </exclude-subsystems>
     </deployment>
 </jboss-deployment-structure>
-
-

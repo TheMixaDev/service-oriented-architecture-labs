@@ -1,11 +1,8 @@
 package com.aeeph.routeservice.model;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
 
-@XmlRootElement(name = "Error")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JacksonXmlRootElement(localName = "Error")
 public class ErrorResponse {
     private int status;
     private String message;

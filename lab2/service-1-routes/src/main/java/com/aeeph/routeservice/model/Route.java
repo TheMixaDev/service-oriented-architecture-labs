@@ -1,17 +1,15 @@
 package com.aeeph.routeservice.model;
 
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+
 import javax.persistence.*;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Date;
 
 @Entity
-@XmlRootElement(name = "Route")
-@XmlAccessorType(XmlAccessType.FIELD)
+@JacksonXmlRootElement(localName = "Route")
 public class Route {
 
     @Id
@@ -38,7 +36,7 @@ public class Route {
             @AttributeOverride(name="y", column=@Column(name="from_y")),
             @AttributeOverride(name="name", column=@Column(name="from_name"))
     })
-    @XmlElement(name = "from")
+    @JacksonXmlProperty(localName = "from")
     private Location fromLocation; //Поле не может быть null
 
     @NotNull(message = "Не заполнено поле to")
@@ -49,14 +47,14 @@ public class Route {
             @AttributeOverride(name="y", column=@Column(name="to_y")),
             @AttributeOverride(name="name", column=@Column(name="to_name"))
     })
-    @XmlElement(name = "to")
+    @JacksonXmlProperty(localName = "to")
     private Location toLocation; //Поле не может быть null
 
     @Min(value = 2, message = "Значение поля distance должно быть больше 1")
     private Integer distance; //Поле может быть null, Значение поля должно быть больше 1
 
     @Enumerated(EnumType.STRING)
-    @XmlElement(name = "priority")
+    @JacksonXmlProperty(localName = "priority")
     private Priority priority;
 
     @PrePersist
