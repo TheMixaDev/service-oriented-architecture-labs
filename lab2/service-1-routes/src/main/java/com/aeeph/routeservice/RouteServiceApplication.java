@@ -8,16 +8,16 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 @SpringBootApplication
 public class RouteServiceApplication extends SpringBootServletInitializer {
 
-    public RouteServiceApplication() {
-        setRegisterErrorPageFilter(false);
-    }
+  public RouteServiceApplication() {
+    setRegisterErrorPageFilter(false);
+  }
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(RouteServiceApplication.class);
-    }
+  @Override
+  protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+    return application.sources(RouteServiceApplication.class);
+  }
 
-    public static void main(String[] args) {
-        SpringApplication.run(RouteServiceApplication.class, args);
-    }
+  public static void main(String[] args) {
+    SpringApplication.run(RouteServiceApplication.class, args);
+  }
 }

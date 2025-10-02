@@ -7,83 +7,83 @@ import java.util.Date;
 @JacksonXmlRootElement(localName = "Route")
 public class Route {
 
-    private long id;
-    private String name;
-    private Coordinates coordinates;
-    private Date creationDate;
-    
-    @JacksonXmlProperty(localName = "from")
-    private Location fromLocation;
-    
-    @JacksonXmlProperty(localName = "to")
-    private Location toLocation;
-    
-    private Integer distance;
+  private long id;
+  private String name;
+  private Coordinates coordinates;
+  private Date creationDate;
 
-    @JacksonXmlProperty(localName = "priority")
-    private Priority priority;
+  @JacksonXmlProperty(localName = "from")
+  private Location fromLocation;
 
-    public long getId() {
-        return id;
-    }
+  @JacksonXmlProperty(localName = "to")
+  private Location toLocation;
 
-    public void setId(long id) {
-        this.id = id;
-    }
+  private Integer distance;
 
-    public String getName() {
-        return name;
-    }
+  @JacksonXmlProperty(localName = "priority")
+  private Priority priority;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public long getId() {
+    return id;
+  }
 
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
+  public void setId(long id) {
+    this.id = id;
+  }
 
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
+  public Coordinates getCoordinates() {
+    return coordinates;
+  }
 
-    public Location getFrom() {
-        return fromLocation;
-    }
+  public void setCoordinates(Coordinates coordinates) {
+    this.coordinates = coordinates;
+  }
 
-    public void setFrom(Location from) {
-        this.fromLocation = from;
-    }
+  public Date getCreationDate() {
+    return creationDate;
+  }
 
-    public Location getTo() {
-        return toLocation;
-    }
+  public void setCreationDate(Date creationDate) {
+    this.creationDate = creationDate;
+  }
 
-    public void setTo(Location to) {
-        this.toLocation = to;
-    }
+  public Location getFrom() {
+    return fromLocation;
+  }
 
-    public Integer getDistance() {
-        return distance;
-    }
+  public void setFrom(Location from) {
+    this.fromLocation = from;
+  }
 
-    public void setDistance(Integer distance) {
-        this.distance = distance;
-    }
+  public Location getTo() {
+    return toLocation;
+  }
 
-    public Priority getPriority() {
-        return priority;
-    }
+  public void setTo(Location to) {
+    this.toLocation = to;
+  }
 
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
+  public Integer getDistance() {
+    return distance;
+  }
+
+  public void setDistance(Integer distance) {
+    this.distance = distance;
+  }
+
+  public Priority getPriority() {
+    return priority;
+  }
+
+  public void setPriority(Priority priority) {
+    this.priority = priority;
+  }
 }

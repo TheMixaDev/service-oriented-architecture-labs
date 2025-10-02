@@ -8,22 +8,21 @@ import java.util.List;
 @JacksonXmlRootElement(localName = "RouteList")
 public class RouteList {
 
-    @JacksonXmlElementWrapper(useWrapping = false)
-    @JacksonXmlProperty(localName = "Route")
-    private List<Route> routes;
+  @JacksonXmlElementWrapper(useWrapping = false)
+  @JacksonXmlProperty(localName = "Route")
+  private List<Route> routes;
 
-    public RouteList() {
-    }
+  public RouteList() {}
 
-    public RouteList(List<Route> routes) {
-        this.routes = routes;
-    }
+  public RouteList(List<Route> routes) {
+    this.routes = routes;
+  }
 
-    public List<Route> getRoutes() {
-        return routes;
-    }
+  public List<Route> getRoutes() {
+    return routes;
+  }
 
-    public void setRoutes(List<Route> routes) {
-        this.routes = routes;
-    }
+  public void setRoutes(List<Route> routes) {
+    this.routes = routes;
+  }
 }
