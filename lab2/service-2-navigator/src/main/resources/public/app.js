@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sortOrderSelect = document.getElementById('sort-order');
     const navigatorOptimalForm = document.getElementById('navigator-optimal-form');
     const navigatorAddForm = document.getElementById('navigator-add-form');
+    const btnMaxFrom = document.getElementById('btn-max-from');
+    const btnUniqueDistances = document.getElementById('btn-unique-distances');
     // Modal helpers
     const modalOverlay = document.getElementById('modal-overlay');
     const modalTitleEl = document.getElementById('modal-title');
@@ -288,6 +290,47 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFiltersBtn.addEventListener('click', () => {
         currentPage = 1;
         applyFiltersAndSort();
+    });
+
+    // Extra actions handlers
+    btnMaxFrom.addEventListener('click', async () => {
+        try {
+            const response = await fetch(`${routesApiBaseUrl}/max/from`);
+            if (!response.ok) {
+                const errorText = await response.text();
+                const parsedMsg = parseXmlErrorMessage(errorText);
+                const msg = parsedMsg || errorText;
+                throw new Error(`Не удалось получить маршрут: ${msg}`);
+            }
+            const xmlString = await response.text();
+            const route = parseRoutesXml(xmlString)[0];
+            if (!route) {
+                showInfo('Маршрут не найден.');
+                return;
+            }
+            showInfo(`Максимальный FROM маршрут: <b>${route.name}</b><br>ID: ${route.id}<br>FROM: ${route.from}`);
+        } catch (error) {
+            showError(error.message);
+        }
+    });
+
+    btnUniqueDistances.addEventListener('click', async () => {
+        try {
+            const response = await fetch(`${routesApiBaseUrl}/distances/unique`);
+            if (!response.ok) {
+                const errorText = await response.text();
+                const parsedMsg = parseXmlErrorMessage(errorText);
+                const msg = parsedMsg || errorText;
+                throw new Error(`Не удалось получить уникальные distance: ${msg}`);
+            }
+            const xmlString = await response.text();
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
+            const distances = Array.from(xmlDoc.getElementsByTagName('Distance')).map(n => n.textContent).filter(Boolean);
+            showInfo(`Уникальные distance: ${distances.length ? distances.join(', ') : 'нет данных'}`);
+        } catch (error) {
+            showError(error.message);
+        }
     });
 
     routesTbody.addEventListener('click', async (event) => {
