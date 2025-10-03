@@ -2,6 +2,7 @@ package com.aeeph.routeservice.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -29,6 +30,7 @@ public class Route {
   private Coordinates coordinates; // Поле не может быть null
 
   @Temporal(TemporalType.TIMESTAMP)
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "UTC")
   private Date
       creationDate; // Поле не может быть null, Значение этого поля должно генерироваться
                     // автоматически
