@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalOkBtn = document.getElementById('modal-ok');
     const modalCloseBtn = document.getElementById('modal-close');
 
-    function showModal({ title = 'Сообщение', message = '' }) {
+    function showModal({ title = 'Message', message = '' }) {
         modalTitleEl.textContent = title;
         modalBodyEl.innerHTML = message;
         modalOverlay.classList.add('show');
@@ -87,8 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderPagination(totalCount, page, pageSize);
 
         } catch (error) {
-            console.error('Не удалось загрузить маршруты:', error);
-            showError('Не удалось загрузить маршруты. Пожалуйста, проверьте соединение с сервисом.');
+            console.error('Failed to load routes:', error);
+            showError('Failed to load routes. Please check connection to the service.');
         }
     }
 
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const errorNode = xmlDoc.getElementsByTagName('Error')[0];
         if (errorNode) {
             const message = errorNode.getElementsByTagName('message')[0]?.textContent;
-            throw new Error(message || 'Неизвестная ошибка сервера');
+            throw new Error(message || 'Unknown server error');
         }
 
         return Array.from(xmlDoc.getElementsByTagName('Route')).map(routeNode => {
@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderRoutes(routes) {
         routesTbody.innerHTML = '';
         if (routes.length === 0) {
-            routesTbody.innerHTML = '<tr><td colspan="8">Маршруты не найдены.</td></tr>';
+            routesTbody.innerHTML = '<tr><td colspan="8">No routes found.</td></tr>';
             return;
         }
         routes.forEach(route => {
@@ -139,8 +139,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${route.distance || 'N/A'}</td>
                 <td>${route.priority || 'N/A'}</td>
                 <td>
-                    <button class="edit-btn" data-id="${route.id}">Редактировать</button>
-                    <button class="delete-btn" data-id="${route.id}">Удалить</button>
+                    <button class="edit-btn" data-id="${route.id}">Edit</button>
+                    <button class="delete-btn" data-id="${route.id}">Delete</button>
                 </td>
             `;
         });
@@ -300,15 +300,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorText = await response.text();
                 const parsedMsg = parseXmlErrorMessage(errorText);
                 const msg = parsedMsg || errorText;
-                throw new Error(`Не удалось получить маршрут: ${msg}`);
+                throw new Error(`Failed to get route: ${msg}`);
             }
             const xmlString = await response.text();
             const route = parseRoutesXml(xmlString)[0];
             if (!route) {
-                showInfo('Маршрут не найден.');
+                showInfo('Route not found.');
                 return;
             }
-            showInfo(`Максимальный FROM маршрут: <b>${route.name}</b><br>ID: ${route.id}<br>FROM: ${route.from}`);
+            showInfo(`Route with maximum FROM: <b>${route.name}</b><br>ID: ${route.id}<br>FROM: ${route.from}`);
         } catch (error) {
             showError(error.message);
         }
@@ -321,13 +321,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorText = await response.text();
                 const parsedMsg = parseXmlErrorMessage(errorText);
                 const msg = parsedMsg || errorText;
-                throw new Error(`Не удалось получить уникальные distance: ${msg}`);
+                throw new Error(`Failed to get unique distances: ${msg}`);
             }
             const xmlString = await response.text();
             const parser = new DOMParser();
             const xmlDoc = parser.parseFromString(xmlString, 'application/xml');
             const distances = Array.from(xmlDoc.getElementsByTagName('Distance')).map(n => n.textContent).filter(Boolean);
-            showInfo(`Уникальные distance: ${distances.length ? distances.join(', ') : 'нет данных'}`);
+            showInfo(`Unique distances: ${distances.length ? distances.join(', ') : 'no data'}`);
         } catch (error) {
             showError(error.message);
         }
@@ -363,7 +363,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function getRouteById(id) {
         try {
             const response = await fetch(`${routesApiBaseUrl}/${id}`);
-            if (!response.ok) throw new Error('Маршрут не найден');
+            if (!response.ok) throw new Error('Route not found');
             const xmlString = await response.text();
             return parseRoutesXml(xmlString)[0];
         } catch (error) {
@@ -413,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorText = await response.text();
                 const parsedMsg = parseXmlErrorMessage(errorText);
                 const msg = parsedMsg || errorText;
-                throw new Error(`Не удалось сохранить маршрут: ${msg}`);
+                throw new Error(`Failed to save route: ${msg}`);
             }
     
             routeForm.reset();
@@ -426,13 +426,13 @@ document.addEventListener('DOMContentLoaded', () => {
     async function deleteRoute(id) {
         // confirmation via modal
         confirmModal({
-            title: 'Подтверждение удаления',
-            message: `Вы уверены, что хотите удалить маршрут ${id}?`,
+            title: 'Delete confirmation',
+            message: `Are you sure you want to delete route ${id}?`,
             onConfirm: async () => {
                 try {
                     const response = await fetch(`${routesApiBaseUrl}/${id}`, { method: 'DELETE' });
                     if (!response.ok) {
-                        throw new Error('Не удалось удалить маршрут.');
+                        throw new Error('Failed to delete route.');
                     }
                     fetchRoutes(currentPage);
                 } catch (error) {
@@ -454,11 +454,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorText = await response.text();
                 const parsedMsg = parseXmlErrorMessage(errorText);
                 const msg = parsedMsg || errorText;
-                throw new Error(`Не удалось найти маршрут: ${msg}`);
+                throw new Error(`Failed to find route: ${msg}`);
             }
             const xmlString = await response.text();
             const route = parseRoutesXml(xmlString)[0];
-            showInfo(`Оптимальный маршрут найден: <b>${route.name}</b><br>Расстояние: ${route.distance}`);
+            showInfo(`Optimal route found: <b>${route.name}</b><br>Distance: ${route.distance}`);
         } catch (error) {
             showError(error.message);
         }
@@ -475,9 +475,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const errorText = await response.text();
                 const parsedMsg = parseXmlErrorMessage(errorText);
                 const msg = parsedMsg || errorText;
-                throw new Error(`Не удалось добавить маршрут: ${msg}`);
+                throw new Error(`Failed to add route: ${msg}`);
             }
-            showInfo('Маршрут добавлен успешно!');
+            showInfo('Route added successfully!');
             fetchRoutes();
         } catch (error) {
             showError(error.message);
@@ -487,15 +487,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function populateRouteForm(route) {
         document.getElementById('route-id').value = route.id;
         document.getElementById('route-name').value = route.name;
-        showInfo(`Редактирование маршрута ID: <b>${route.id}</b>. Пожалуйста, заполните все поля для обновления.`);
+        showInfo(`Editing route ID: <b>${route.id}</b>. Please fill all fields to update.`);
     }
 
     function showError(message) {
-        showModal({ title: 'Ошибка', message });
+        showModal({ title: 'Error', message });
     }
 
     function showInfo(message) {
-        showModal({ title: 'Информация', message });
+        showModal({ title: 'Information', message });
     }
 
     function confirmModal({ title = 'Подтверждение', message = '', onConfirm }) {
@@ -505,11 +505,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const footer = modalOkBtn.parentElement;
         // Clone primary button to avoid stacked listeners
         const okBtn = modalOkBtn.cloneNode(true);
-        okBtn.textContent = 'Подтвердить';
+        okBtn.textContent = 'Confirm';
         okBtn.onclick = () => { hideModal(); if (onConfirm) onConfirm(); };
         const cancelBtn = document.createElement('button');
         cancelBtn.className = 'btn';
-        cancelBtn.textContent = 'Отмена';
+        cancelBtn.textContent = 'Cancel';
         cancelBtn.onclick = hideModal;
         footer.innerHTML = '';
         footer.appendChild(cancelBtn);

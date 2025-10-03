@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>СОА Лабораторная работа 2</title>
+    <title>SOA Lab 2</title>
     <link rel="stylesheet" href="style.css">
     <style>
         /* Simple modal styles */
@@ -20,15 +20,15 @@
 </head>
 <body>
 
-<h1>Управление маршрутами</h1>
+<h1>Route Management</h1>
 
 <div class="container">
-    <h2>Все маршруты</h2>
+    <h2>All Routes</h2>
     <div class="controls">
         <div id="filters-container"></div>
         <div class="filter-actions">
-            <button id="add-filter" type="button">Добавить фильтр</button>
-            <button id="clear-filters" type="button">Очистить фильтры</button>
+            <button id="add-filter" type="button">Add Filter</button>
+            <button id="clear-filters" type="button">Clear Filters</button>
         </div>
         <div class="sort-controls">
             <select id="sort-field">
@@ -50,25 +50,25 @@
                 <option value="asc">asc</option>
                 <option value="desc">desc</option>
             </select>
-            <button id="apply-filters" type="button">Применить</button>
+            <button id="apply-filters" type="button">Apply</button>
         </div>
         <div class="extra-actions" style="margin-top:0px; display:flex; gap:8px; flex-wrap:wrap;">
-            <button id="btn-max-from" type="button">Маршрут с максимальным FROM</button>
-            <button id="btn-unique-distances" type="button">Уникальные distance</button>
+            <button id="btn-max-from" type="button">Route with Max FROM</button>
+            <button id="btn-unique-distances" type="button">Unique distances</button>
         </div>
     </div>
     <table id="routes-table">
         <thead>
         <tr>
             <th>ID</th>
-            <th>Название</th>
-            <th>Координаты</th>
-            <th>Дата создания</th>
-            <th>От</th>
-            <th>До</th>
-            <th>Расстояние</th>
-            <th>Важность</th>
-            <th>Действия</th>
+            <th>Name</th>
+            <th>Coordinates</th>
+            <th>Creation Date</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Distance</th>
+            <th>Priority</th>
+            <th>Actions</th>
         </tr>
         </thead>
         <tbody>
@@ -79,48 +79,48 @@
 </div>
 
 <div class="container">
-    <h2>Добавить / Обновить маршрут</h2>
+    <h2>Add / Update Route</h2>
     <form id="route-form">
         <input type="hidden" id="route-id">
-        <input type="text" id="route-name" placeholder="Название маршрута" required>
-        <input type="number" id="route-coord-x" placeholder="Координата X" required>
-        <input type="number" id="route-coord-y" placeholder="Координата Y" required>
-        <input type="text" id="route-from-name" placeholder="От Название" required>
-        <input type="number" id="route-from-x" placeholder="От X" required>
-        <input type="number" id="route-from-y" placeholder="От Y" required>
-        <input type="text" id="route-to-name" placeholder="До Название" required>
-        <input type="number" id="route-to-x" placeholder="До X" required>
-        <input type="number" id="route-to-y" placeholder="До Y" required>
-        <input type="number" id="route-distance" placeholder="Расстояние ( > 1)">
+        <input type="text" id="route-name" placeholder="Route name" required>
+        <input type="number" id="route-coord-x" placeholder="Coordinate X" required>
+        <input type="number" id="route-coord-y" placeholder="Coordinate Y" required>
+        <input type="text" id="route-from-name" placeholder="From Name" required>
+        <input type="number" id="route-from-x" placeholder="From X" required>
+        <input type="number" id="route-from-y" placeholder="From Y" required>
+        <input type="text" id="route-to-name" placeholder="To Name" required>
+        <input type="number" id="route-to-x" placeholder="To X" required>
+        <input type="number" id="route-to-y" placeholder="To Y" required>
+        <input type="number" id="route-distance" placeholder="Distance (> 1)">
         <select id="route-priority">
-            <option value="">Важность (не выбрано)</option>
+            <option value="">Priority (not selected)</option>
             <option value="LOW">LOW</option>
             <option value="MEDIUM">MEDIUM</option>
             <option value="HIGH">HIGH</option>
         </select>
-        <button type="submit">Сохранить маршрут</button>
+        <button type="submit">Save route</button>
     </form>
 </div>
 
 <div class="container">
-    <h2>Навигатор</h2>
+    <h2>Navigator</h2>
     <form id="navigator-optimal-form">
-        <h3>Найти оптимальный маршрут</h3>
-        <input type="number" id="nav-from-id" placeholder="От ID маршрута" required>
-        <input type="number" id="nav-to-id" placeholder="До ID маршрута" required>
+        <h3>Find optimal route</h3>
+        <input type="number" id="nav-from-id" placeholder="From route ID" required>
+        <input type="number" id="nav-to-id" placeholder="To route ID" required>
         <select id="nav-shortest">
-            <option value="true">Кратчайший</option>
-            <option value="false">Длинный</option>
+            <option value="true">Shortest</option>
+            <option value="false">Longest</option>
         </select>
-        <button type="submit">Найти маршрут</button>
+        <button type="submit">Find route</button>
     </form>
     <hr>
     <form id="navigator-add-form">
-        <h3>Добавить маршрут между локациями</h3>
-        <input type="number" id="nav-add-from-id" placeholder="От ID маршрута" required>
-        <input type="number" id="nav-add-to-id" placeholder="До ID маршрута" required>
-        <input type="number" id="nav-add-distance" placeholder="Расстояние" required min="2">
-        <button type="submit">Добавить маршрут</button>
+        <h3>Add a route between locations</h3>
+        <input type="number" id="nav-add-from-id" placeholder="From route ID" required>
+        <input type="number" id="nav-add-to-id" placeholder="To route ID" required>
+        <input type="number" id="nav-add-distance" placeholder="Distance" required min="2">
+        <button type="submit">Add route</button>
     </form>
 </div>
 
@@ -130,11 +130,11 @@
 <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal" role="document">
         <div class="modal-header">
-            <h3 id="modal-title" class="modal-title">Сообщение</h3>
+            <h3 id="modal-title" class="modal-title">Message</h3>
         </div>
         <div id="modal-body" class="modal-body"></div>
         <div class="modal-footer">
-            <button id="modal-ok" class="btn primary">Ок</button>
+            <button id="modal-ok" class="btn primary">OK</button>
         </div>
     </div>
     
