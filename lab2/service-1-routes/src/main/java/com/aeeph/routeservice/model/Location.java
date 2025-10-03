@@ -16,7 +16,6 @@ public class Location {
 
   @NotNull(message = "Не заполнено поле name")
   @Size(min = 1, message = "Поле name не может быть пустым")
-  @Size(max = 100, message = "Максимальная длина name — 100")
   private String name; // Строка не может быть пустой, Поле не может быть null
 
   public Double getX() {
