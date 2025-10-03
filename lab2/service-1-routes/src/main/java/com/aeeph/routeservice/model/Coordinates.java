@@ -1,7 +1,9 @@
 package com.aeeph.routeservice.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import java.math.BigDecimal;
 import javax.persistence.Embeddable;
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 
@@ -9,17 +11,17 @@ import javax.validation.constraints.NotNull;
 @JacksonXmlRootElement(localName = "Coordinates")
 public class Coordinates {
 
-  @Max(value = 716, message = "Максимальное значение для поля x - 716")
-  private double x; // Максимальное значение поля: 716
+  @DecimalMax(value = "716", inclusive = true, message = "Максимальное значение для поля x - 716")
+  private BigDecimal x; // Максимальное значение поля: 716
 
   @NotNull(message = "Не заполнено поле y")
   private Integer y; // Поле не может быть null
 
-  public double getX() {
+  public BigDecimal getX() {
     return x;
   }
 
-  public void setX(double x) {
+  public void setX(BigDecimal x) {
     this.x = x;
   }
 

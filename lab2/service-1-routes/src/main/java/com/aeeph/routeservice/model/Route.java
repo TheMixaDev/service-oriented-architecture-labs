@@ -19,6 +19,8 @@ public class Route {
 
   @NotNull(message = "Не заполнено поле name")
   @Size(min = 1, message = "Поле name не может быть пустым")
+  @Size(max = 100, message = "Максимальная длина name — 100")
+  @Column(length = 100)
   private String name; // Поле не может быть null, Строка не может быть пустой
 
   @NotNull(message = "Не заполнено поле coordinates")
@@ -37,7 +39,7 @@ public class Route {
   @AttributeOverrides({
     @AttributeOverride(name = "x", column = @Column(name = "from_x")),
     @AttributeOverride(name = "y", column = @Column(name = "from_y")),
-    @AttributeOverride(name = "name", column = @Column(name = "from_name"))
+    @AttributeOverride(name = "name", column = @Column(name = "from_name", length = 100))
   })
   @JacksonXmlProperty(localName = "from")
   private Location fromLocation; // Поле не может быть null
@@ -48,7 +50,7 @@ public class Route {
   @AttributeOverrides({
     @AttributeOverride(name = "x", column = @Column(name = "to_x")),
     @AttributeOverride(name = "y", column = @Column(name = "to_y")),
-    @AttributeOverride(name = "name", column = @Column(name = "to_name"))
+    @AttributeOverride(name = "name", column = @Column(name = "to_name", length = 100))
   })
   @JacksonXmlProperty(localName = "to")
   private Location toLocation; // Поле не может быть null

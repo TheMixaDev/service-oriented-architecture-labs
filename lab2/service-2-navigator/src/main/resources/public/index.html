@@ -16,6 +16,9 @@
         .btn.primary { background: #2563eb; color: #fff; border-color: #2563eb; }
         .btn.ghost { background: transparent; }
         .modal-overlay.show { display: flex; }
+        /* Ensure long strings in table cells wrap and don't break layout */
+        #routes-table { table-layout: fixed; width: 100%; }
+        #routes-table th, #routes-table td { white-space: normal; word-break: break-word; overflow-wrap: anywhere; }
     </style>
 </head>
 <body>
