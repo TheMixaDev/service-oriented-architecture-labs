@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  consul:
+    image: consul:1.15
+    ports:
+      - "8500:8500"
+    command: agent -server -bootstrap-expect=1 -client=0.0.0.0 -ui
+
+  eureka:
+    build: ./eureka-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  config-service:
+    build: ./config-service
+    ports:
+      - "8888:8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka
+      - config-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  routes-service-1:
+    build: ./service-1-routes
+    ports:
+      - "8082:8082"
+    depends_on:
+      - consul
+      - config-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8082
+
+  routes-service-2:
+    build: ./service-1-routes
+    ports:
+      - "8083:8083"
+    depends_on:
+      - consul
+      - config-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SERVER_PORT=8083
+
+  navigator-service:
+    build: ./service-2-navigator
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+      - config-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  haproxy:
+    image: haproxy:2.7
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      - routes-service-1
+      - routes-service-2
