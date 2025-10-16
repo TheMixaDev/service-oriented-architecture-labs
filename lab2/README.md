@@ -1,15 +1,3 @@
-
-
-./asadmin create-jvm-options -Djavax.net.ssl.keyStore=/Users/alwx/Desktop/payara5/bin/keystore.p12
-./asadmin create-jvm-options -Djavax.net.ssl.keyStorePassword=1234
-./asadmin create-jvm-options -Djavax.net.ssl.keyStoreType=PKCS12
-
-./asadmin restart-domain
-
-
-./asadmin set configs.config.server-config.network-config.network-listeners.network-listener.http-listener-2.ssl.cert-nickname=s1as
-./asadmin set configs.config.server-config.network-config.network-listeners.network-listener.http-listener-2.port=27274
-
 export _JAVA_OPTIONS="-XX:MaxHeapSize=2G -XX:MaxMetaspaceSize=1G"
 
 

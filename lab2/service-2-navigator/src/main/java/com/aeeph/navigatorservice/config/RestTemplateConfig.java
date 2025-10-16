@@ -12,6 +12,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContexts;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -23,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
 
   @Bean
+  @LoadBalanced
   public RestTemplate restTemplate(RestTemplateBuilder builder) {
     RestTemplate restTemplate;
     try {

@@ -1,15 +1,18 @@
 server:
-  port: 8081
+  port: 27274
 
 spring:
   application:
     name: navigator-service
+  config:
+    import: "optional:configserver:http://localhost:8888"
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
+# All calls should be proxied via Zuul API Gateway
 routes:
   service:
     url: http://api-gateway/api/v1/routes
