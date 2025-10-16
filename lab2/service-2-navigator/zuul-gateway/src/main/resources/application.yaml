@@ -21,7 +21,7 @@ zuul:
       serviceId: navigator-service
       stripPrefix: false
     routes-service:
-      path: /api/v1/routes/**
+      path: /**
       url: https://127.0.0.1:27297/
       stripPrefix: false
 

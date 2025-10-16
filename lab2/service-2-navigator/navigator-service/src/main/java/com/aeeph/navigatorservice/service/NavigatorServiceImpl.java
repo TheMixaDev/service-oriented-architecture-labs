@@ -23,12 +23,11 @@ public class NavigatorServiceImpl implements NavigatorService {
   private final String routesServiceUrl;
 
   public NavigatorServiceImpl(
-      RestTemplate restTemplate
-//      ,@Value("${routes.service.url}") String routesServiceUrl
+      RestTemplate restTemplate,
+      @Value("${routes.service.url}") String routesServiceUrl
   ) {
     this.restTemplate = restTemplate;
-//    this.routesServiceUrl = routesServiceUrl;
-    this.routesServiceUrl = "https://127.0.0.1:27297/api/v1/routes";
+    this.routesServiceUrl = routesServiceUrl;
   }
 
   @Override
