@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const routesApiBaseUrl = 'https://localhost:27297/api/v1/routes';
-    const navigatorApiBaseUrl = 'https://localhost:27274/api/v1/navigator';
+    const routesApiBaseUrl = 'https://localhost:18080/api/v1/routes';
+    const navigatorApiBaseUrl = 'https://localhost:18080/api/v1/navigator';
 
     const routesTbody = document.querySelector('#routes-table tbody');
     const routeForm = document.getElementById('route-form');

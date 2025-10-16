@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 18080
   ssl:
     enabled: true
     key-store: classpath:keystore.p12
@@ -22,10 +22,11 @@ zuul:
       stripPrefix: false
     routes-service:
       path: /api/v1/routes/**
-      serviceId: routes-service
+      url: https://127.0.0.1:27297/
       stripPrefix: false
 
   ignored-services: '*'
+  sslHostnameValidationEnabled: false
 
   host:
     connect-timeout-millis: 10000
@@ -43,3 +44,8 @@ navigator-service:
   ribbon:
     NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
     NIWSServerListClassName: com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList
+
+routes-service:
+  ribbon:
+    TrustAllCertificates: true
+    IsSecure: true
