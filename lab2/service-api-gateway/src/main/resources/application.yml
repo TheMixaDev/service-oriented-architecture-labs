@@ -1,5 +1,12 @@
 server:
   port: 8765
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12      # ← имя вашего p12 в ресурсах
+    key-store-type: PKCS12
+    key-store-password: 1234              # ← ваш пароль
+    # key-alias: gateway                   # укажите, если требуется
+    # key-password: 1234                   # если отличается от key-store-password
 
 spring:
   application:
@@ -24,3 +31,10 @@ zuul:
       path: /api/v1/navigator/**
       service-id: navigator-service
   ignored-services: '*'
+
+routes-service:
+  ribbon:
+    eureka:
+      enabled: false
+    listOfServers: https://localhost:27297
+    IsSecure: true
