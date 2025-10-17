@@ -17,11 +17,11 @@ zuul:
   # prefix: /api
   routes:
     navigator-service:
-      path: /api/v1/navigator/**
+      path: /**
       serviceId: navigator-service
       stripPrefix: false
     routes-service:
-      path: /**
+      path: /api/v1/routes/**
       url: https://127.0.0.1:27297/
       stripPrefix: false
 

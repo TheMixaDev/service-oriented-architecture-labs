@@ -23,7 +23,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     
     // Serve static resources from /api/v1/navigator/public
     registry
-        .addResourceHandler("/api/v1/navigator/public/**")
+        .addResourceHandler("/navigator/public/**")
         .addResourceLocations("classpath:/public/");
   }
 }
