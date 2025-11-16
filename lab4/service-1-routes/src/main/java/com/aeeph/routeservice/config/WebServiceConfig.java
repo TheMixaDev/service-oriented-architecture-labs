@@ -61,6 +61,12 @@ public class WebServiceConfig extends WsConfigurerAdapter {
     errorMappings.setProperty(
         "com.aeeph.routeservice.exception.BadRequestException",
         SoapFaultDefinition.CLIENT.toString());
+    errorMappings.setProperty(
+        "com.aeeph.routeservice.exception.ValidationFormatException",
+        SoapFaultDefinition.CLIENT.toString());
+    errorMappings.setProperty(
+        "javax.validation.ConstraintViolationException",
+        SoapFaultDefinition.CLIENT.toString());
     exceptionResolver.setExceptionMappings(errorMappings);
     exceptionResolver.setOrder(1);
     return exceptionResolver;

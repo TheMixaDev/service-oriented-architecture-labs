@@ -36,6 +36,8 @@ public class SoapExceptionHandler extends SoapFaultMappingExceptionResolver {
               .map(ConstraintViolation::getMessage)
               .collect(Collectors.joining(", "));
       addErrorDetail(fault, 422, message);
+    } else if (ex instanceof ValidationFormatException) {
+      addErrorDetail(fault, 422, ex.getMessage());
     } else if (ex instanceof IllegalArgumentException) {
       String message = "Некорректные данные в запросе: " + ex.getMessage();
       addErrorDetail(fault, 400, message);
