@@ -54,6 +54,7 @@ public class RouteEndpoint {
 
     Map<String, String> filters = extractMapFromElement(request, "filters", "filter");
     Map<String, String> operations = extractMapFromElement(request, "operations", "operation");
+    operations = mapSoapOperationsToInternal(operations);
 
     List<Sort.Order> orders = new ArrayList<>();
     if (sort != null && !sort.isEmpty()) {
@@ -329,6 +330,47 @@ public class RouteEndpoint {
       }
     }
     return map;
+  }
+
+  private Map<String, String> mapSoapOperationsToInternal(Map<String, String> operations) {
+    if (operations == null || operations.isEmpty()) {
+      return operations;
+    }
+    Map<String, String> mappedOperations = new HashMap<>();
+    for (Map.Entry<String, String> entry : operations.entrySet()) {
+      String key = entry.getKey();
+      String value = entry.getValue();
+      if (value != null && !value.trim().isEmpty()) {
+        String mappedValue = mapSoapOperationToInternal(value.trim().toLowerCase());
+        String mappedKey = key + "_op";
+        mappedOperations.put(mappedKey, mappedValue);
+      }
+    }
+    return mappedOperations;
+  }
+
+  private String mapSoapOperationToInternal(String soapOperation) {
+    if (soapOperation == null || soapOperation.isEmpty()) {
+      return "==";
+    }
+    switch (soapOperation.toLowerCase()) {
+      case "eq":
+        return "==";
+      case "ne":
+        return "!=";
+      case "gt":
+        return ">";
+      case "ge":
+        return ">=";
+      case "lt":
+        return "<";
+      case "le":
+        return "<=";
+      case "~":
+        return "~";
+      default:
+        return soapOperation;
+    }
   }
 
   private Route elementToRoute(Element element) {
